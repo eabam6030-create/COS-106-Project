@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+  PROJECT: COS 106 Student Portfolio
+  PAGE: Contact
+  PURPOSE:
+  Provides a contact form with JavaScript validation and
+  contact information. Satisfies the form validation requirement
+  and also provides the image and multimedia elements required
+  by the HTML rubric.
+-->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Abam Emmanuel Dodeye</title>
+
+  <!-- GOOGLE FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- EXTERNAL STYLESHEET -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="fixed-nav scrolled" id="navbar">
+    <nav class="nav-container">
+      <a href="index.html" class="nav-logo">AED</a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="planner.html">Planner</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+
+    <!-- PAGE HEADER -->
+    <section class="section reveal">
+      <div class="container">
+        <p class="section-label">Get In Touch</p>
+        <h1 class="page-title">Contact <span class="gold">Me</span></h1>
+        <p class="page-intro">
+          Whether you want to discuss a project, collaborate on AI safety
+          research, or just say hello, I would love to hear from you.
+          Fill out the form and I will get back to you shortly.
+        </p>
+      </div>
+    </section>
+
+    <!-- CONTACT LAYOUT: Info on left, Form on right -->
+    <section class="section contact-main-section reveal">
+      <div class="container contact-layout">
+
+        <!-- LEFT COLUMN: Contact Info -->
+        <aside class="contact-info-panel">
+
+          <div class="contact-info-card">
+            <p class="contact-info-label">Email</p>
+            <a href="mailto:dodeyeabam1@gmail.com" class="contact-info-value">dodeyeabam1@gmail.com</a>
+          </div>
+
+          <div class="contact-info-card">
+            <p class="contact-info-label">Location</p>
+            <p class="contact-info-value">Lagos, Nigeria</p>
+          </div>
+
+          <div class="contact-info-card">
+            <p class="contact-info-label">Response Time</p>
+            <p class="contact-info-value">Within 24 hours</p>
+          </div>
+
+          <!-- IMAGE REQUIREMENT: Satisfies the images requirement -->
+          <div class="contact-image-wrapper">
+            <!--
+              IMAGE ELEMENT: This satisfies the image requirement from the brief.
+              Replace the src with your own photo later if you want.
+              The images folder is ready for local files like images/profile.jpg
+            -->
+            <img 
+              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&auto=format&fit=crop&q=80" 
+              alt="Minimalist workspace with laptop on dark desk"
+            />
+          </div>
+
+          <!-- MULTIMEDIA REQUIREMENT: Audio element satisfies the multimedia requirement -->
+          <div class="contact-media">
+            <p class="media-label">Audio Introduction</p>
+            <audio controls class="contact-audio">
+              <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+            <p class="media-hint">A short placeholder audio greeting. Replace with your own voice intro later.</p>
+          </div>
+
+        </aside>
+
+        <!-- RIGHT COLUMN: Contact Form -->
+        <div class="contact-form-panel">
+
+          <!--
+            CONTACT FORM: Uses semantic labels linked to inputs via for/id.
+            novalidate disables the browser's default popup validation so
+            our custom JavaScript validation can run instead and show
+            styled error messages under each field.
+          -->
+          <form id="contactForm" class="contact-form" novalidate>
+
+            <div class="form-group">
+              <label for="contactName">Full Name</label>
+              <input
+                type="text"
+                id="contactName"
+                name="contactName"
+                placeholder="Abam Emmanuel Dodeye"
+                required
+              />
+              <p class="error-message" id="nameError"></p>
+            </div>
+
+            <div class="form-group">
+              <label for="contactEmail">Email Address</label>
+              <input
+                type="email"
+                id="contactEmail"
+                name="contactEmail"
+                placeholder="yourname@example.com"
+                required
+              />
+              <p class="error-message" id="emailError"></p>
+            </div>
+
+            <div class="form-group">
+              <label for="contactPhone">Phone Number</label>
+              <input
+                type="tel"
+                id="contactPhone"
+                name="contactPhone"
+                placeholder="08012345678"
+                required
+              />
+              <p class="error-message" id="phoneError"></p>
+            </div>
+
+            <div class="form-group">
+              <label for="contactMessage">Message</label>
+              <textarea
+                id="contactMessage"
+                name="contactMessage"
+                rows="6"
+                placeholder="Tell me about your project or idea..."
+                required
+              ></textarea>
+              <p class="error-message" id="messageError"></p>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Send Message</button>
+
+            <!-- SUCCESS MESSAGE: Hidden by default, shown by JS after valid submission -->
+            <div class="success-message hidden" id="successMessage">
+              <p>Thank you. Your message has been sent successfully. I will respond within 24 hours.</p>
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">
+        &copy; 2025 Abam Emmanuel Dodeye. COS 106 Portfolio Project.
+      </p>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="planner.html">Planner</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

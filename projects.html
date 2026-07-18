@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+  PROJECT: COS 106 Student Portfolio
+  PAGE: Projects
+  PURPOSE:
+  Showcases the three main projects with descriptions, tech stacks,
+  features, and simulated links. Satisfies the "at least three
+  projects with descriptions, images, and links" project requirement.
+-->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects | Abam Emmanuel Dodeye</title>
+
+  <!-- GOOGLE FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- EXTERNAL STYLESHEET -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="fixed-nav scrolled" id="navbar">
+    <nav class="nav-container">
+      <a href="index.html" class="nav-logo">AED</a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="planner.html">Planner</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+
+    <!-- PAGE HEADER -->
+    <section class="section reveal">
+      <div class="container">
+        <p class="section-label">Selected Work</p>
+        <h1 class="page-title">
+          My <span class="gold">Projects</span>
+        </h1>
+        <p class="page-intro">
+          A collection of projects I have built or plan to build, each
+          designed to solve a real problem in AI safety, productivity,
+          or education.
+        </p>
+      </div>
+    </section>
+
+    <!--
+      PROJECT SHOWCASE
+      Each project is a full-width block with alternating image
+      placement on desktop. Uses semantic <article> elements.
+    -->
+
+    <!-- PROJECT 1: SENTINEL AI -->
+    <section class="section project-showcase reveal">
+      <div class="container">
+        <article class="project-block">
+
+          <!-- IMAGE / VISUAL SIDE -->
+          <div class="project-visual">
+            <div class="project-visual-inner">
+              <span class="project-visual-number">01</span>
+              <p class="project-visual-label">Sentinel AI</p>
+            </div>
+          </div>
+
+          <!-- CONTENT SIDE -->
+          <div class="project-content">
+            <p class="project-tag">Cybersecurity / Python / FastAPI</p>
+            <h2 class="project-heading">Sentinel AI</h2>
+            <p class="project-subheading">
+              AI-Powered Email Phishing Detector
+            </p>
+            <p class="project-body">
+              An intelligent mail-routing tool designed to parse incoming
+              communication, run behavioral heuristics, and detect
+              sophisticated social engineering tactics before they reach
+              the user.
+            </p>
+
+            <h4 class="project-features-title">Key Features</h4>
+            <ul class="project-features">
+              <li>Heuristic Intent Engine for detecting urgency and risk signals</li>
+              <li>Domain Reputation Analysis to catch look-alike spoofing</li>
+              <li>Explainable Risk Score from 0.0 to 1.0 with full breakdown</li>
+            </ul>
+
+            <a href="#" class="btn btn-secondary project-link">View Case Study</a>
+          </div>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- PROJECT 2: ANNOTEX -->
+    <section class="section project-showcase project-alt reveal">
+      <div class="container">
+        <article class="project-block reversed">
+
+          <div class="project-visual">
+            <div class="project-visual-inner">
+              <span class="project-visual-number">02</span>
+              <p class="project-visual-label">Annotex</p>
+            </div>
+          </div>
+
+          <div class="project-content">
+            <p class="project-tag">Web App / Vanilla JavaScript</p>
+            <h2 class="project-heading">Annotex</h2>
+            <p class="project-subheading">
+              Web-Based Text Data Annotation Tool
+            </p>
+            <p class="project-body">
+              A clean, responsive dashboard for labeling custom text
+              datasets for machine learning models. Built to eliminate
+              the clutter of existing massive annotation platforms.
+            </p>
+
+            <h4 class="project-features-title">Key Features</h4>
+            <ul class="project-features">
+              <li>Minimal labeling canvas with keyboard shortcuts</li>
+              <li>Dynamic progress tracking with JSON and CSV export</li>
+              <li>Session state memory using browser LocalStorage</li>
+            </ul>
+
+            <a href="#" class="btn btn-secondary project-link">View Case Study</a>
+          </div>
+
+        </article>
+      </div>
+    </section>
+
+    <!-- PROJECT 3: KEYTRACK -->
+    <section class="section project-showcase reveal">
+      <div class="container">
+        <article class="project-block">
+
+          <div class="project-visual">
+            <div class="project-visual-inner">
+              <span class="project-visual-number">03</span>
+              <p class="project-visual-label">KeyTrack</p>
+            </div>
+          </div>
+
+          <div class="project-content">
+            <p class="project-tag">Music Tech / Web Audio API</p>
+            <h2 class="project-heading">KeyTrack</h2>
+            <p class="project-subheading">
+              Interactive Keyboard Learning Companion
+            </p>
+            <p class="project-body">
+              A visual practicing utility built to help beginner keyboard
+              players learn music theory, practice scales, and map out
+              complex chords in real time.
+            </p>
+
+            <h4 class="project-features-title">Key Features</h4>
+            <ul class="project-features">
+              <li>Interactive virtual keybed with dynamic note highlighting</li>
+              <li>Chord progression engine tracking transitions like 1-4-5</li>
+              <li>Progress dashboard with practice streaks and accuracy logs</li>
+            </ul>
+
+            <a href="#" class="btn btn-secondary project-link">View Case Study</a>
+          </div>
+
+        </article>
+      </div>
+    </section>
+
+    <!--
+      PROJECT COMPARISON TABLE
+      Uses semantic <table> to satisfy the "tables" HTML requirement
+      in the project brief. Compares all three projects at a glance.
+    -->
+    <section class="section project-table-section reveal">
+      <div class="container">
+
+        <div class="section-header">
+          <p class="section-label">At A Glance</p>
+          <h2 class="section-title">Project Comparison</h2>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="project-table">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Category</th>
+                <th>Primary Tech</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sentinel AI</td>
+                <td>Cybersecurity</td>
+                <td>Python, FastAPI</td>
+                <td><span class="status-tag">In Development</span></td>
+              </tr>
+              <tr>
+                <td>Annotex</td>
+                <td>Web Application</td>
+                <td>Vanilla JavaScript</td>
+                <td><span class="status-tag">Concept</span></td>
+              </tr>
+              <tr>
+                <td>KeyTrack</td>
+                <td>Music Technology</td>
+                <td>Web Audio API</td>
+                <td><span class="status-tag">Concept</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">
+        &copy; 2025 Abam Emmanuel Dodeye. COS 106 Portfolio Project.
+      </p>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="planner.html">Planner</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

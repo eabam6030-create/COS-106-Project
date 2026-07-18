@@ -1,0 +1,1784 @@
+/* ============================================================
+   COS 106 PORTFOLIO, Abam Emmanuel Dodeye
+   FILE: css/style.css
+   PURPOSE: Single external stylesheet for the entire portfolio.
+   All pages link to this one file. Changes here affect every page.
+   Structure:
+   1. CSS Custom Properties (variables)
+   2. Reset and Base Styles
+   3. Typography
+   4. Layout Utilities
+   5. Navigation
+   6. Hero Section
+   7. Bio Snapshot Section
+   8. Projects Preview Section
+   9. Stats Section
+   10. Contact Teaser Section
+   11. Footer
+   12. Buttons
+   13. Scroll Reveal Animation
+   14. Responsive Breakpoints
+============================================================ */
+
+
+/* ============================================================
+   SECTION 1: CSS CUSTOM PROPERTIES
+   These are CSS variables defined on the :root element, which means
+   they are available everywhere in the stylesheet. Using variables means
+   you only have to change a colour or font in one place to update
+   the entire site. This is the single source of truth for design tokens.
+============================================================ */
+
+:root {
+
+  /* COLOUR PALETTE: Minimalist black and gold theme */
+  --color-bg:         #0a0a0a;   /* Near-black page background */
+  --color-surface:    #111111;   /* Slightly lighter surface for cards */
+  --color-surface-2:  #1a1a1a;   /* Hover states and borders */
+  --color-gold:       #c9a84c;   /* Primary accent, warm gold */
+  --color-gold-light: #e2c06a;   /* Lighter gold for hover states */
+  --color-text:       #f0f0f0;   /* Primary text, off-white not pure white */
+  --color-text-muted: #888888;   /* Secondary text, labels and captions */
+  --color-border:     #2a2a2a;   /* Subtle borders between elements */
+
+  /* TYPOGRAPHY: Font families loaded from Google Fonts */
+  --font-display: 'Bebas Neue', sans-serif;   /* Used for large headings */
+  --font-body:    'Inter', sans-serif;         /* Used for all body text */
+
+  /* SPACING: Consistent spacing units used across the layout */
+  --section-padding: 6rem 0;     /* Top and bottom padding for each section */
+  --container-max:   1200px;     /* Maximum content width */
+
+  /* TRANSITIONS: Reusable timing for hover effects */
+  --transition-fast:   0.2s ease;
+  --transition-medium: 0.4s ease;
+
+  /* BORDER RADIUS: Consistent rounding on cards and buttons */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+}
+
+
+/* ============================================================
+   SECTION 2: RESET AND BASE STYLES
+   The browser applies its own default styles to elements (margins,
+   padding, bullet points, etc.). This reset removes those defaults
+   so we start from a clean, predictable baseline across all browsers.
+   box-sizing: border-box makes sizing elements much easier because
+   padding and border are included in the width, not added on top of it.
+============================================================ */
+
+*,
+*::before,
+*::after {
+  /* UNIVERSAL BOX SIZING: padding and border are included in width/height.
+     Without this, a box set to width: 300px with 20px padding would
+     actually be 340px wide. border-box prevents that surprise. */
+  box-sizing: border-box;
+  margin:  0;
+  padding: 0;
+}
+
+html {
+  /* SMOOTH SCROLLING: When an anchor link is clicked, the page scrolls
+     smoothly instead of jumping instantly. This is controlled here in CSS
+     and is separate from any JavaScript scroll handling. */
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  background-color: var(--color-bg);
+  color:            var(--color-text);
+  font-family:      var(--font-body);
+
+  /* LINE HEIGHT: 1.7 gives body text comfortable breathing room between lines.
+     The default of 1.2 is too tight for longer paragraphs. */
+  line-height: 1.7;
+
+  /* OVERFLOW-X HIDDEN: Prevents any element that accidentally overflows
+     the viewport width from creating a horizontal scrollbar. */
+  overflow-x: hidden;
+}
+
+/* ANCHOR TAGS: Remove default underline and inherit the parent colour.
+   Specific link styles are applied via more targeted selectors below. */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* LISTS: Remove bullet points and indentation from all lists by default.
+   Individual list components re-add styling where needed. */
+ul {
+  list-style: none;
+}
+
+/* IMAGES: Prevent images from ever exceeding their container width.
+   display: block removes the small gap browsers add below inline images. */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+
+/* ============================================================
+   SECTION 3: TYPOGRAPHY
+   Font sizes use clamp() which accepts three values:
+   clamp(minimum, preferred, maximum)
+   The preferred value is a viewport-relative size (vw) that scales
+   fluidly with the screen. The min and max cap it at sensible limits.
+   This means no separate font-size rules are needed in breakpoints.
+============================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+}
+
+h1 {
+  /* CLAMP EXPLAINED: Never smaller than 3rem, ideally 8vw, never larger than 7rem.
+     At a 1200px screen, 8vw = 96px (6rem). Scales down on small screens. */
+  font-size: clamp(3rem, 8vw, 7rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 5vw, 4rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+p {
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  color: var(--color-text-muted);
+  max-width: 65ch;  /* MEASURE: Limits line length for readability. 65 characters
+                       is considered the optimal line length for body text. */
+}
+
+/* GOLD UTILITY CLASS: Applied to any inline element that should appear in gold.
+   Used on the last name in the hero and the CTA heading. */
+.gold {
+  color: var(--color-gold);
+}
+
+
+/* ============================================================
+   SECTION 4: LAYOUT UTILITIES
+   Reusable layout containers used across all sections.
+   The .container class is the main content wrapper. It sets a max width
+   and centres itself with auto margins. Every section uses this.
+============================================================ */
+
+.container {
+  max-width:     var(--container-max);
+  margin-left:   auto;
+  margin-right:  auto;
+
+  /* PADDING: Side padding keeps content from touching screen edges on mobile.
+     clamp scales this from 1rem on tiny screens to 2rem on larger ones. */
+  padding-left:  clamp(1rem, 4vw, 2rem);
+  padding-right: clamp(1rem, 4vw, 2rem);
+}
+
+/* SECTION BASE: Applied to every major content section.
+   Provides consistent vertical breathing room between sections. */
+.section {
+  padding: var(--section-padding);
+}
+
+/* SECTION HEADER: The label + title block used at the top of content sections. */
+.section-header {
+  margin-bottom: 3rem;
+}
+
+/* SECTION LABEL: The small uppercase category text above section titles.
+   Similar to how Landon Norris site uses small category markers. */
+.section-label {
+  font-family:    var(--font-body);
+  font-size:      0.75rem;
+  font-weight:    600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color:          var(--color-gold);
+  margin-bottom:  0.5rem;
+
+  /* OVERRIDE: Remove the max-width from the global p rule for this element */
+  max-width: none;
+}
+
+/* SECTION CTA: The centered call-to-action below a section's content. */
+.section-cta {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+
+/* ============================================================
+   SECTION 5: NAVIGATION
+   The nav is fixed to the top of the viewport so it stays visible
+   while scrolling. It starts transparent and gains a solid background
+   when JavaScript adds the "scrolled" class after the user scrolls down.
+   This pattern is common on premium portfolio and brand sites.
+============================================================ */
+
+.fixed-nav {
+  /* FIXED POSITIONING: Removes the nav from normal document flow and pins
+     it to the top of the viewport. z-index ensures it sits above all content. */
+  position: fixed;
+  top:      0;
+  left:     0;
+  width:    100%;
+  z-index:  1000;
+
+  /* START TRANSPARENT: No background color on load. transition animates
+     the background color change when .scrolled is added by JavaScript. */
+  background-color: transparent;
+  transition: background-color var(--transition-medium),
+              box-shadow        var(--transition-medium);
+}
+
+/* SCROLLED STATE: JavaScript adds this class when window.scrollY > 50.
+   The nav background fades in smoothly thanks to the transition above. */
+.fixed-nav.scrolled {
+  background-color: rgba(10, 10, 10, 0.95);
+
+  /* BOX SHADOW: Adds a subtle gold-tinted underline to separate the nav
+     from the content below it, only when the nav has a background. */
+  box-shadow: 0 1px 0 rgba(201, 168, 76, 0.2);
+}
+
+/* NAV CONTAINER: Flexbox row that places logo left and links right.
+   align-items: center vertically centres them within the nav height. */
+.nav-container {
+  /* FLEXBOX ROW: Children sit side by side horizontally.
+     justify-content: space-between pushes logo to the far left and links to the right.
+     Without Flexbox, these would stack vertically. */
+  display:         flex;
+  justify-content: space-between;
+  align-items:     center;
+  max-width:       var(--container-max);
+  margin:          0 auto;
+  padding:         1.25rem clamp(1rem, 4vw, 2rem);
+}
+
+/* NAV LOGO: The initials wordmark in the top left. */
+.nav-logo {
+  font-family:    var(--font-display);
+  font-size:      1.5rem;
+  color:          var(--color-gold);
+  letter-spacing: 0.1em;
+  transition:     color var(--transition-fast);
+}
+
+.nav-logo:hover {
+  color: var(--color-gold-light);
+}
+
+/* NAV LINKS LIST: Horizontal row of navigation links on desktop. */
+.nav-links {
+  display:     flex;
+  align-items: center;
+  gap:         2.5rem;
+}
+
+/* NAV LINK ITEMS: Individual navigation anchor tags. */
+.nav-links a {
+  font-family:    var(--font-body);
+  font-size:      0.85rem;
+  font-weight:    500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color:          var(--color-text-muted);
+  transition:     color var(--transition-fast);
+
+  /* UNDERLINE ANIMATION: A pseudo-element creates an animated gold underline
+     on hover. This is more flexible than using text-decoration. */
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.nav-links a::after {
+  /* PSEUDO-ELEMENT UNDERLINE: Created with content: '' so it renders
+     but has no text. Positioned absolutely below the link text.
+     Starts at width: 0 and transitions to width: 100% on hover. */
+  content:    '';
+  position:   absolute;
+  bottom:     0;
+  left:       0;
+  width:      0;
+  height:     1px;
+  background: var(--color-gold);
+  transition: width var(--transition-fast);
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--color-text);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 100%;
+}
+
+/* HAMBURGER TOGGLE: Only shown on mobile. Hidden on desktop via CSS. */
+.nav-toggle {
+  /* RESET BUTTON STYLES: Browsers add default button padding and borders. */
+  display:    none;
+  flex-direction: column;
+  gap:        5px;
+  background: none;
+  border:     none;
+  cursor:     pointer;
+  padding:    4px;
+}
+
+/* HAMBURGER LINES: Three <span> tags styled as horizontal bars. */
+.nav-toggle span {
+  display:    block;
+  width:      24px;
+  height:     2px;
+  background: var(--color-text);
+  transition: transform var(--transition-fast),
+              opacity   var(--transition-fast);
+}
+
+
+/* ============================================================
+   SECTION 6: HERO SECTION
+   Full viewport height opening section. Uses Flexbox to centre
+   the content both vertically and horizontally. The dark background
+   makes the gold accent colour pop against it.
+============================================================ */
+
+.hero {
+  /* FULL VIEWPORT HEIGHT: The hero fills the entire screen on load,
+     pushing all other content below the fold. min-height prevents
+     collapse on very short content. */
+  min-height: 100vh;
+
+  /* FLEXBOX CENTERING: Both justify-content and align-items: center
+     together centre children both horizontally and vertically. */
+  display:        flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:    center;
+  text-align:     center;
+  position:       relative;
+
+  /* PADDING TOP: Pushes content below the fixed nav bar (height ~70px)
+     so the heading is not hidden behind the navigation. */
+  padding-top: 5rem;
+
+  /* BACKGROUND PATTERN: A subtle radial gradient gives the hero depth
+     without distracting from the text. The gold gradient is faint. */
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(201, 168, 76, 0.08) 0%, transparent 60%),
+    var(--color-bg);
+}
+
+/* HERO CONTENT: The inner wrapper that constrains content width
+   so very long names do not stretch edge to edge on wide screens. */
+.hero-content {
+  max-width: 900px;
+  padding:   0 clamp(1rem, 4vw, 2rem);
+}
+
+/* HERO LABEL: Small uppercase text above the main name. */
+.hero-label {
+  font-size:      0.75rem;
+  font-weight:    600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color:          var(--color-gold);
+  margin-bottom:  1rem;
+  max-width:      none;
+
+  /* FADE-IN ANIMATION: Starts invisible and slides up into place.
+     animation-fill-mode: both means the element holds its start state
+     before the animation begins, preventing a flash of visible content. */
+  animation: fadeUp 0.8s ease both;
+  animation-delay: 0.1s;
+}
+
+/* HERO NAME: The massive display heading. */
+.hero-name {
+  font-family:   var(--font-display);
+  font-size:     clamp(3.5rem, 10vw, 8rem);
+  line-height:   1;
+  margin-bottom: 1.5rem;
+  color:         var(--color-text);
+
+  animation: fadeUp 0.8s ease both;
+  animation-delay: 0.25s;
+}
+
+/* HERO TAGLINE: The one-line description below the name. */
+.hero-tagline {
+  font-size:     clamp(0.9rem, 2vw, 1.1rem);
+  color:         var(--color-text-muted);
+  margin-bottom: 2.5rem;
+  max-width:     none;
+
+  animation: fadeUp 0.8s ease both;
+  animation-delay: 0.4s;
+}
+
+/* HERO ACTIONS: The two buttons in a flex row. */
+.hero-actions {
+  display:     flex;
+  gap:         1rem;
+  justify-content: center;
+  flex-wrap:   wrap;  /* WRAP: On very small screens, buttons stack instead of overflow. */
+
+  animation: fadeUp 0.8s ease both;
+  animation-delay: 0.55s;
+}
+
+/* SCROLL INDICATOR: The bouncing arrow at the bottom of the hero. */
+.scroll-indicator {
+  position:  absolute;
+  bottom:    2rem;
+  left:      50%;
+
+  /* TRANSLATE: Shifts it left by 50% of its own width to truly centre it.
+     Because left: 50% positions the left edge at centre, not the element's centre. */
+  transform: translateX(-50%);
+  opacity:   1;
+  transition: opacity var(--transition-medium);
+}
+
+.scroll-indicator.hidden {
+  opacity: 0;
+}
+
+/* SCROLL ARROW: An angled border creates a CSS-only downward arrow chevron.
+   No image or icon font needed. Just borders and a rotation transform. */
+.scroll-arrow {
+  display: block;
+  width:   20px;
+  height:  20px;
+  border-right: 2px solid var(--color-gold);
+  border-bottom: 2px solid var(--color-gold);
+
+  /* ROTATE 45deg: Turns the right and bottom borders into a downward-pointing
+     chevron shape. This is a common CSS trick for pure-CSS arrows. */
+  transform: rotate(45deg);
+  animation: bounce 1.5s ease infinite;
+}
+
+/* BOUNCE KEYFRAME: Makes the scroll arrow move up and down repeatedly.
+   This draws the visitor's eye downward, hinting there is more content. */
+@keyframes bounce {
+  0%, 100% { transform: rotate(45deg) translateY(0);    }
+  50%       { transform: rotate(45deg) translateY(6px);  }
+}
+
+/* FADE-UP KEYFRAME: Used by hero elements and reveal animations.
+   Elements start invisible (opacity 0) and 20px below their final position,
+   then fade in and move up to their natural position. */
+@keyframes fadeUp {
+  from {
+    opacity:   0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity:   1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ============================================================
+   SECTION 7: BIO SNAPSHOT SECTION
+   Two-column layout with photo placeholder on the left and
+   biography text on the right. Switches to single column on mobile.
+============================================================ */
+
+.bio-snapshot {
+  border-top: 1px solid var(--color-border);
+}
+
+/* BIO GRID: Two columns on desktop using CSS Grid.
+   The first column (photo) is fixed at 340px. The second column
+   takes the remaining space. This creates an asymmetric layout
+   that is common in portfolio biography sections. */
+.bio-grid {
+  display:               grid;
+  grid-template-columns: 340px 1fr;
+  gap:                   4rem;
+  align-items:           center;
+}
+
+/* PHOTO PLACEHOLDER BOX: Maintains a square-ish card shape
+   for where the profile photo will eventually go. */
+.placeholder-box {
+  aspect-ratio: 3 / 4;
+  background:   var(--color-surface);
+  border:       1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display:      flex;
+  flex-direction: column;
+  align-items:  center;
+  justify-content: center;
+  gap:          0.75rem;
+}
+
+/* PLACEHOLDER INITIALS: Large initials shown in place of the photo. */
+.placeholder-initials {
+  font-family: var(--font-display);
+  font-size:   3rem;
+  color:       var(--color-gold);
+  letter-spacing: 0.1em;
+}
+
+/* PLACEHOLDER NOTE: Instructions for the developer to replace later. */
+.placeholder-note {
+  font-size:  0.75rem;
+  color:      var(--color-text-muted);
+  max-width:  none;
+  text-align: center;
+}
+
+/* BIO INTRO: The first paragraph styled slightly larger for visual hierarchy. */
+.bio-intro {
+  font-size:     clamp(1rem, 2vw, 1.15rem);
+  color:         var(--color-text);
+  margin-bottom: 1rem;
+  max-width:     none;
+}
+
+.bio-text p {
+  margin-bottom: 1rem;
+}
+
+/* SKILLS LIST: A styled list of technical skills inside the bio section.
+   Uses a gold dot as a bullet point created with a pseudo-element. */
+.skills-list {
+  display:               grid;
+  grid-template-columns: 1fr 1fr;
+  gap:                   0.5rem 1rem;
+  margin:                1.5rem 0;
+}
+
+.skills-list li {
+  font-size:   0.9rem;
+  color:       var(--color-text-muted);
+  padding-left: 1rem;
+  position:    relative;
+}
+
+.skills-list li::before {
+  /* GOLD DOT: A pseudo-element creates the bullet without using
+     list-style. This allows full control over its colour and position. */
+  content:    '';
+  position:   absolute;
+  left:       0;
+  top:        0.55em;
+  width:      5px;
+  height:     5px;
+  background: var(--color-gold);
+  border-radius: 50%;
+}
+
+
+/* ============================================================
+   SECTION 8: PROJECTS PREVIEW SECTION
+   Three equal-width cards in a CSS Grid. Each card has a hover
+   state that lifts it slightly and adds a gold border on the top edge.
+============================================================ */
+
+.projects-preview {
+  background: var(--color-surface);
+  border-top:    1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* PROJECTS GRID: Three equal columns using the repeat() shorthand.
+   1fr means each column gets one equal fraction of the available space. */
+.projects-grid {
+  display:               grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:                   1.5rem;
+}
+
+/* PROJECT CARD: Individual project preview card. */
+.project-card {
+  background:    var(--color-bg);
+  border:        1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding:       2rem;
+
+  /* FLEX COLUMN: Stacks card content vertically so the link button
+     can be pushed to the bottom with margin-top: auto. */
+  display:        flex;
+  flex-direction: column;
+
+  /* TRANSITION: Smoothly animates the transform and border-color on hover. */
+  transition: transform       var(--transition-medium),
+              border-color    var(--transition-medium),
+              box-shadow      var(--transition-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card::before {
+  /* TOP BORDER ACCENT: A pseudo-element creates the gold top border that
+     slides in from the left on hover. Starts at width 0. */
+  content:    '';
+  position:   absolute;
+  top:        0;
+  left:       0;
+  width:      0;
+  height:     2px;
+  background: var(--color-gold);
+  transition: width var(--transition-medium);
+}
+
+.project-card:hover {
+  /* LIFT EFFECT: Moves the card 6px up and adds a subtle shadow.
+     translateY with a negative value moves an element upward. */
+  transform:    translateY(-6px);
+  border-color: var(--color-surface-2);
+  box-shadow:   0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.project-card:hover::before {
+  width: 100%;
+}
+
+/* PROJECT NUMBER: The large decorative "01", "02", "03" badges. */
+.project-number {
+  font-family:   var(--font-display);
+  font-size:     2.5rem;
+  color:         var(--color-surface-2);
+  line-height:   1;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+/* PROJECT TAG: Small category label below the project name. */
+.project-tag {
+  font-size:      0.7rem;
+  font-weight:    600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color:          var(--color-gold);
+  margin-bottom:  0.75rem;
+  max-width:      none;
+}
+
+/* PROJECT NAME: The project title inside the card. */
+.project-name {
+  font-family:   var(--font-display);
+  font-size:     clamp(1.25rem, 2vw, 1.6rem);
+  color:         var(--color-text);
+  margin-bottom: 0.75rem;
+}
+
+/* PROJECT DESC: The short description text inside the card. */
+.project-desc {
+  font-size:     0.9rem;
+  line-height:   1.6;
+  color:         var(--color-text-muted);
+  flex-grow:     1;  /* FLEX GROW: Makes this expand to fill remaining card height,
+                        pushing the link button to the bottom of the card. */
+  margin-bottom: 1.5rem;
+  max-width:     none;
+}
+
+/* CARD LINK: The "View Project" link at the bottom of each card. */
+.card-link {
+  font-size:      0.8rem;
+  font-weight:    600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color:          var(--color-gold);
+  transition:     color var(--transition-fast);
+  align-self:     flex-start;
+}
+
+.card-link:hover {
+  color: var(--color-gold-light);
+}
+
+
+/* ============================================================
+   SECTION 9: STATS SECTION
+   Three stat items in a horizontal row. Numbers count up from zero
+   using the countUp() function in main.js when they enter the viewport.
+============================================================ */
+
+.stats-section {
+  border-top: 1px solid var(--color-border);
+}
+
+/* STATS GRID: Three equal columns on desktop. */
+.stats-grid {
+  display:               grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:                   2rem;
+  text-align:            center;
+}
+
+/* STAT ITEM: Individual statistic with a vertical divider between items. */
+.stat-item {
+  padding: 2rem;
+  border-right: 1px solid var(--color-border);
+}
+
+.stat-item:last-child {
+  border-right: none;  /* Remove divider from the last item to avoid a hanging line. */
+}
+
+/* STAT NUMBER: The large counting number. */
+.stat-number {
+  display:     block;
+  font-family: var(--font-display);
+  font-size:   clamp(3rem, 6vw, 5rem);
+  color:       var(--color-gold);
+  line-height: 1;
+}
+
+/* STAT LABEL: Descriptive text below the number. */
+.stat-label {
+  font-size:      0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color:          var(--color-text-muted);
+  margin-top:     0.5rem;
+  max-width:      none;
+}
+
+
+/* ============================================================
+   SECTION 10: CONTACT TEASER SECTION
+   Full-width bold CTA section at the bottom of the homepage.
+   Dark background with a gold gradient radial glow for visual impact.
+============================================================ */
+
+.contact-teaser {
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(201, 168, 76, 0.06) 0%, transparent 60%),
+    var(--color-surface);
+  border-top:    1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* TEASER HEADING: The large CTA heading. max-width: none overrides the global p rule. */
+.teaser-heading {
+  font-family:   var(--font-display);
+  font-size:     clamp(2rem, 5vw, 4.5rem);
+  color:         var(--color-text);
+  margin:        1rem auto 2.5rem;
+  max-width:     800px;
+  line-height:   1.15;
+}
+
+
+/* ============================================================
+   SECTION 11: FOOTER
+   Minimal dark footer with copyright text and nav links in a flex row.
+============================================================ */
+
+.site-footer {
+  background:  var(--color-bg);
+  border-top:  1px solid var(--color-border);
+  padding:     2rem 0;
+}
+
+/* FOOTER INNER: Flexbox row with copyright left and links right.
+   flex-wrap: wrap allows them to stack on mobile if space is tight. */
+.footer-inner {
+  display:         flex;
+  justify-content: space-between;
+  align-items:     center;
+  flex-wrap:       wrap;
+  gap:             1rem;
+}
+
+/* FOOTER COPYRIGHT TEXT */
+.footer-copy {
+  font-size:  0.8rem;
+  color:      var(--color-text-muted);
+  max-width:  none;
+}
+
+/* FOOTER LINKS: Horizontal list of navigation links. */
+.footer-links {
+  display:    flex;
+  gap:        1.5rem;
+  flex-wrap:  wrap;
+}
+
+.footer-links a {
+  font-size:      0.8rem;
+  letter-spacing: 0.05em;
+  color:          var(--color-text-muted);
+  transition:     color var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--color-gold);
+}
+
+
+/* ============================================================
+   SECTION 12: BUTTONS
+   Two button styles used across all pages.
+   - .btn-primary: Solid gold background, used for main actions.
+   - .btn-secondary: Outlined with gold border, used for secondary actions.
+   Both share the .btn base class for shared padding and typography.
+============================================================ */
+
+.btn {
+  display:        inline-block;
+  padding:        0.85rem 2rem;
+  font-family:    var(--font-body);
+  font-size:      0.8rem;
+  font-weight:    600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius:  var(--radius-sm);
+  border:         2px solid transparent;
+  cursor:         pointer;
+  transition:     background-color var(--transition-fast),
+                  color            var(--transition-fast),
+                  border-color     var(--transition-fast),
+                  transform        var(--transition-fast);
+}
+
+.btn:hover {
+  /* SUBTLE LIFT: Moves the button up 2px on hover for a tactile feel.
+     This is less dramatic than the card lift and feels appropriate for buttons. */
+  transform: translateY(-2px);
+}
+
+/* PRIMARY BUTTON: Solid gold with dark text for maximum contrast. */
+.btn-primary {
+  background-color: var(--color-gold);
+  border-color:     var(--color-gold);
+  color:            #0a0a0a;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-gold-light);
+  border-color:     var(--color-gold-light);
+}
+
+/* SECONDARY BUTTON: Transparent background with gold border.
+   Text is gold by default and turns dark when hovered to match the fill. */
+.btn-secondary {
+  background-color: transparent;
+  border-color:     var(--color-gold);
+  color:            var(--color-gold);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-gold);
+  color:            #0a0a0a;
+}
+
+
+/* ============================================================
+   SECTION 13: SCROLL REVEAL ANIMATION
+   Elements with the class "reveal" start invisible and slightly
+   below their natural position. When the Intersection Observer in
+   main.js detects them entering the viewport, it adds the class
+   "revealed" which triggers the transition defined here.
+   This creates a satisfying staggered fade-up effect as you scroll.
+============================================================ */
+
+/* REVEAL INITIAL STATE: Hidden and shifted down by 30px before animation. */
+.reveal {
+  opacity:    0;
+  transform:  translateY(30px);
+
+  /* TRANSITION: Smoothly animates both opacity and position over 0.7 seconds.
+     ease-out starts fast and slows at the end, which feels natural for
+     content appearing from below. */
+  transition: opacity   0.7s ease-out,
+              transform 0.7s ease-out;
+}
+
+/* REVEALED STATE: JavaScript adds this class. The element transitions
+   to its natural visible position at full opacity. */
+.reveal.revealed {
+  opacity:   1;
+  transform: translateY(0);
+}
+
+
+/* ============================================================
+   SECTION 14: RESPONSIVE BREAKPOINTS
+   Media queries adjust the layout for tablet and mobile screens.
+   Breakpoints:
+   - max-width: 1024px = tablet and below
+   - max-width: 768px  = mobile and below
+   Each section's specific layout changes are grouped here
+   so all responsive rules are in one predictable location.
+============================================================ */
+
+/* TABLET BREAKPOINT: 1024px and below */
+@media (max-width: 1024px) {
+
+  /* PROJECTS GRID: Reduce from 3 columns to 2 on tablet. */
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+/* MOBILE BREAKPOINT: 768px and below */
+@media (max-width: 768px) {
+
+  /* NAV TOGGLE: Show the hamburger button on mobile. */
+  .nav-toggle {
+    display: flex;
+  }
+
+  /* NAV LINKS: Hidden by default on mobile. When the hamburger is clicked,
+     JavaScript adds the "nav-open" class which sets display: flex here.
+     The links are positioned absolutely to drop down below the nav bar. */
+  .nav-links {
+    display:          none;
+    flex-direction:   column;
+    align-items:      flex-start;
+    gap:              0;
+    position:         absolute;
+    top:              100%;
+    left:             0;
+    width:            100%;
+    background-color: rgba(10, 10, 10, 0.98);
+    padding:          1rem clamp(1rem, 4vw, 2rem) 2rem;
+    border-top:       1px solid var(--color-border);
+  }
+
+  /* OPEN STATE: JavaScript adds nav-open class to the nav-links ul. */
+  .nav-links.nav-open {
+    display: flex;
+  }
+
+  .nav-links li {
+    width: 100%;
+  }
+
+  .nav-links a {
+    display:  block;
+    padding:  0.85rem 0;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nav-links a::after {
+    /* DISABLE underline animation on mobile as it looks odd in the stacked list. */
+    display: none;
+  }
+
+  /* BIO GRID: Single column on mobile, photo above text. */
+  .bio-grid {
+    grid-template-columns: 1fr;
+    gap:                   2rem;
+  }
+
+  /* PHOTO PLACEHOLDER: Limit width on mobile so it does not fill the full screen. */
+  .bio-photo-placeholder {
+    max-width: 280px;
+    margin:    0 auto;
+  }
+
+  /* PROJECTS GRID: Single column on mobile. */
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* STATS GRID: Single column on mobile, remove the right border dividers. */
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-item {
+    border-right:  none;
+    border-bottom: 1px solid var(--color-border);
+    padding:       1.5rem 0;
+  }
+
+  .stat-item:last-child {
+    border-bottom: none;
+  }
+
+  /* FOOTER INNER: Stack copyright and links vertically on mobile. */
+  .footer-inner {
+    flex-direction: column;
+    text-align:     center;
+  }
+
+  .footer-links {
+    justify-content: center;
+  }
+
+}
+/* ============================================================
+   ABOUT PAGE STYLES
+   These styles are specific to about.html.
+   No inline styles are used. Everything is centralized here.
+============================================================ */
+
+/* PAGE CONTENT WRAPPER
+   Adds top spacing so content does not hide behind fixed nav */
+.page-content {
+  padding-top: 6rem;
+}
+
+/* PAGE TITLE */
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1.1;
+}
+
+/* ABOUT GRID LAYOUT
+   Two-column layout: education sidebar + biography text */
+.about-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* EDUCATION PANEL */
+.education-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 2rem;
+  border-radius: var(--radius-md);
+}
+
+.education-title {
+  margin-bottom: 2rem;
+}
+
+.education-item {
+  margin-bottom: 2rem;
+}
+
+.education-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-gold);
+}
+
+.education-school {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.education-detail {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ABOUT TEXT */
+.about-heading {
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+/* ABOUT CARDS GRID */
+.about-cards {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.about-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+/* SINGLE COLUMN SKILL LIST */
+.single-column {
+  grid-template-columns: 1fr;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 1024px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* ============================================================
+   REVEAL FALLBACK
+   Safety net so content is never permanently hidden if the 
+   Intersection Observer fails to fire for any reason.
+   After 1 second, any .reveal element that is not yet revealed
+   will fade in naturally. This guarantees content is always
+   visible even if JavaScript is slow or blocked.
+============================================================ */
+
+.reveal {
+  animation: revealFallback 0.8s ease 1s forwards;
+}
+
+@keyframes revealFallback {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ============================================================
+   PROJECTS PAGE STYLES
+   Full-width alternating showcase blocks and a comparison table.
+============================================================ */
+
+/* PAGE INTRO PARAGRAPH */
+.page-intro {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  color: var(--color-text-muted);
+  max-width: 700px;
+  margin-top: 1.5rem;
+}
+
+/* PROJECT SHOWCASE SECTION 
+   Alternating background colors help separate each project visually. */
+.project-showcase {
+  border-top: 1px solid var(--color-border);
+}
+
+.project-alt {
+  background: var(--color-surface);
+}
+
+/* PROJECT BLOCK 
+   Two-column grid: visual on one side, content on the other. */
+.project-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* REVERSED VARIANT
+   Swaps the visual to the right using CSS Grid direction. */
+.project-block.reversed .project-visual {
+  order: 2;
+}
+
+/* PROJECT VISUAL SIDE
+   The decorative "image placeholder" area with the project number. */
+.project-visual {
+  aspect-ratio: 4 / 3;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* GRADIENT GLOW inside the visual box */
+.project-visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(201, 168, 76, 0.1) 0%, transparent 70%);
+}
+
+.project-visual-inner {
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+.project-visual-number {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 12vw, 9rem);
+  color: var(--color-gold);
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.project-visual-label {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+  max-width: none;
+}
+
+/* PROJECT CONTENT SIDE */
+.project-heading {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 0.5rem;
+}
+
+.project-subheading {
+  font-size: 1rem;
+  color: var(--color-gold);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  max-width: none;
+}
+
+.project-body {
+  margin-bottom: 2rem;
+}
+
+.project-features-title {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+/* PROJECT FEATURES LIST 
+   Same gold dot bullet style as the skills list for consistency. */
+.project-features {
+  margin-bottom: 2rem;
+}
+
+.project-features li {
+  padding-left: 1.25rem;
+  position: relative;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.project-features li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 6px;
+  height: 6px;
+  background: var(--color-gold);
+  border-radius: 50%;
+}
+
+.project-link {
+  display: inline-block;
+}
+
+/* PROJECT COMPARISON TABLE SECTION */
+.project-table-section {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* TABLE WRAPPER 
+   Enables horizontal scrolling on very small screens instead of breaking layout. */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.project-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.project-table thead {
+  background: var(--color-bg);
+}
+
+.project-table th {
+  text-align: left;
+  padding: 1.25rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-gold);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.project-table td {
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.project-table tbody tr {
+  transition: background-color var(--transition-fast);
+}
+
+.project-table tbody tr:hover {
+  background: var(--color-bg);
+}
+
+/* STATUS TAG */
+.status-tag {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--radius-sm);
+}
+
+/* RESPONSIVE FOR PROJECTS PAGE */
+@media (max-width: 1024px) {
+  .project-block {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .project-block.reversed .project-visual {
+    order: 0;
+  }
+}
+/* ============================================================
+   PLANNER PAGE STYLES
+   Styles for the task manager: stats, form, and task list.
+============================================================ */
+
+/* PLANNER STATS SECTION */
+.planner-stats-section {
+  border-top: 1px solid var(--color-border);
+}
+
+.planner-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.planner-stat {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  text-align: center;
+}
+
+/* TASK FORM SECTION */
+.planner-form-section {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.task-form {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+}
+
+/* FORM ROW: Three inputs side by side on desktop */
+.form-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-gold);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.85rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Style the date picker icon so it is visible on dark background */
+.form-group input[type="date"] {
+  color-scheme: dark;
+}
+
+/* TASK LIST SECTION */
+.task-empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.task-empty-state p {
+  max-width: none;
+  color: var(--color-text-muted);
+}
+
+/* HIDDEN state added by JavaScript when tasks exist */
+.task-empty-state.hidden {
+  display: none;
+}
+
+/* TASK LIST CONTAINER */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* TASK CARD 
+   Each dynamically created task looks like this. */
+.task-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+  transition: border-color var(--transition-fast), 
+              opacity var(--transition-fast);
+}
+
+.task-card:hover {
+  border-color: var(--color-gold);
+}
+
+/* COMPLETED TASK STATE */
+.task-card.completed {
+  opacity: 0.5;
+}
+
+.task-card.completed .task-title {
+  text-decoration: line-through;
+}
+
+/* TASK CHECKBOX (a styled button, not a real checkbox) */
+.task-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.task-check:hover {
+  border-color: var(--color-gold);
+}
+
+.task-card.completed .task-check {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.task-check::before {
+  content: '';
+  width: 10px;
+  height: 6px;
+  border-left: 2px solid #0a0a0a;
+  border-bottom: 2px solid #0a0a0a;
+  transform: rotate(-45deg) translate(1px, -1px);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.task-card.completed .task-check::before {
+  opacity: 1;
+}
+
+/* TASK INFO */
+.task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.task-title {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.task-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  max-width: none;
+  margin: 0;
+}
+
+.task-meta-subject {
+  color: var(--color-gold);
+  font-weight: 500;
+}
+
+/* DELETE BUTTON */
+.task-delete {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.task-delete:hover {
+  border-color: #d24545;
+  color: #d24545;
+}
+
+/* RESPONSIVE FOR PLANNER PAGE */
+@media (max-width: 1024px) {
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .planner-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .task-card {
+    grid-template-columns: auto 1fr;
+  }
+
+  .task-delete {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+}
+/* ============================================================
+   CONTACT PAGE STYLES
+   Two-column layout with info panel and form panel.
+============================================================ */
+
+.contact-main-section {
+  border-top: 1px solid var(--color-border);
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* CONTACT INFO PANEL */
+.contact-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-info-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+
+.contact-info-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-gold);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  max-width: none;
+}
+
+.contact-info-value {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  font-weight: 500;
+  word-break: break-all;
+  transition: color var(--transition-fast);
+}
+
+a.contact-info-value:hover {
+  color: var(--color-gold);
+}
+
+/* CONTACT IMAGE */
+.contact-image-wrapper {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  aspect-ratio: 4 / 3;
+}
+
+.contact-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-medium);
+}
+
+.contact-image-wrapper:hover img {
+  transform: scale(1.05);
+}
+
+/* MULTIMEDIA: AUDIO PLAYER */
+.contact-media {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+
+.media-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.75rem;
+  max-width: none;
+}
+
+.contact-audio {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.media-hint {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  max-width: none;
+}
+
+/* CONTACT FORM PANEL */
+.contact-form-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ERROR MESSAGES */
+.error-message {
+  font-size: 0.8rem;
+  color: #d24545;
+  margin-top: 0.4rem;
+  min-height: 1.2em;
+  max-width: none;
+}
+
+/* INPUT ERROR STATE */
+.input-error {
+  border-color: #d24545 !important;
+}
+
+/* SUCCESS MESSAGE */
+.success-message {
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.success-message p {
+  color: var(--color-gold);
+  font-size: 0.9rem;
+  max-width: none;
+  margin: 0;
+}
+
+.success-message.hidden {
+  display: none;
+}
+
+/* RESPONSIVE FOR CONTACT PAGE */
+@media (max-width: 1024px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+/* ============================================================
+   PROFILE PHOTO STYLING
+   Ensures the profile photo matches the placeholder aspect ratio
+   and has a subtle gold border for a premium look.
+============================================================ */
+
+.profile-photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;         /* Prevents photo distortion by cropping smartly */
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-gold);
+}

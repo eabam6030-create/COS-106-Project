@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+  PROJECT: COS 106 Student Portfolio, Abam Emmanuel Dodeye
+  FILE: index.html (Homepage)
+  PURPOSE: This is the entry point of the portfolio. It introduces the student,
+           provides navigation to all other pages, and sets the visual tone
+           for the entire site. Every section here uses semantic HTML elements
+           so browsers and screen readers understand the page structure.
+-->
+
+<head>
+  <meta charset="UTF-8" />
+
+  <!--
+    VIEWPORT META: Tells mobile browsers to use the device width as the layout width.
+    Without this, mobile browsers zoom out and show a desktop-sized layout shrunk down.
+    This is required for any responsive design to work correctly.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Abam Emmanuel Dodeye | Portfolio</title>
+
+  <!--
+    GOOGLE FONTS: Loads two fonts over the network.
+    - "Bebas Neue" is used for large display headings, bold and impactful.
+    - "Inter" is used for body text, clean and highly readable at small sizes.
+    These are linked here so they are available before the page renders.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!--
+    EXTERNAL STYLESHEET: All visual styles live in one shared file.
+    Every page in this project links to this same file so the design stays consistent.
+    Keeping styles external means you can change the whole site look by editing one file.
+  -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <!--
+    HEADER / NAV: The fixed navigation bar at the top of every page.
+    - "fixed-nav" positions it above the page and keeps it visible while scrolling.
+    - JavaScript will add the class "scrolled" when the user scrolls down,
+      which gives the nav a solid dark background so text stays readable.
+    - The nav uses a semantic <nav> element inside <header> so screen readers
+      know this is the site navigation landmark.
+  -->
+  <header class="fixed-nav" id="navbar">
+    <nav class="nav-container">
+
+      <!--
+        LOGO LINK: Clicking the name returns the user to the homepage.
+        Using the initials styled as a wordmark keeps the nav clean and minimal.
+      -->
+      <a href="index.html" class="nav-logo">AED</a>
+
+      <!--
+        HAMBURGER BUTTON: Only visible on mobile screens (controlled via CSS).
+        When clicked, JavaScript toggles the "nav-open" class on the nav links
+        to show or hide the mobile menu. aria-label makes it accessible
+        for screen reader users who cannot see the icon.
+      -->
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!--
+        NAV LINKS: The main site navigation list.
+        Using <ul> and <li> is semantically correct for a list of links.
+        On desktop these sit in a horizontal row. On mobile they stack vertically.
+        The current page link gets the "active" class for visual feedback.
+      -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="planner.html">Planner</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+    </nav>
+  </header>
+
+  <!--
+    MAIN CONTENT: The <main> element wraps all primary page content.
+    It tells browsers and assistive technologies that this is the core content,
+    not the header or footer. There should only be one <main> per page.
+  -->
+  <main>
+
+    <!--
+      HERO SECTION: The large full-screen opening section of the homepage.
+      It immediately presents the student's name and role in bold typography,
+      similar to the Landon Norris reference site. The goal is visual impact.
+      The "reveal" class is used by the Intersection Observer in main.js
+      to trigger the fade-up animation when the section enters the viewport.
+    -->
+    <section class="hero" id="hero">
+
+      <!--
+        HERO CONTENT WRAPPER: Centers the text vertically and horizontally
+        within the full-viewport hero section using Flexbox in the CSS.
+      -->
+      <div class="hero-content">
+
+        <!--
+          HERO LABEL: A small uppercase label above the main name.
+          This is a common design pattern on modern portfolios to
+          give context before the large display name appears.
+        -->
+        <p class="hero-label">Student Portfolio</p>
+
+        <!--
+          HERO NAME: The student's full name as the primary heading.
+          clamp() in the CSS makes this scale fluidly between screen sizes
+          without needing separate breakpoint rules for font size alone.
+          <span> wraps the last name so it can be styled in gold separately.
+        -->
+        <h1 class="hero-name">
+          Abam Emmanuel<br />
+          <span class="gold">Dodeye</span>
+        </h1>
+
+        <!--
+          HERO TAGLINE: A short, punchy description of who this person is.
+          Kept to one line so it reads fast, similar to the reference site style.
+        -->
+        <p class="hero-tagline">
+          AI Research Enthusiast. Cybersecurity Learner. Keyboard Player.
+        </p>
+
+        <!--
+          HERO ACTIONS: Two call-to-action buttons.
+          The primary button is solid gold and takes the user to the projects page.
+          The secondary button is outlined and takes them to the contact page.
+          Using <a> tags styled as buttons is correct when they navigate somewhere.
+        -->
+        <div class="hero-actions">
+          <a href="projects.html" class="btn btn-primary">View My Work</a>
+          <a href="contact.html" class="btn btn-secondary">Get In Touch</a>
+        </div>
+
+      </div>
+
+      <!--
+        HERO SCROLL INDICATOR: An animated downward arrow that hints to the user
+        that there is more content below the fold. The animation is a CSS keyframe
+        defined in style.css. It fades out automatically when the user scrolls
+        via JavaScript adding a class.
+      -->
+      <div class="scroll-indicator" id="scrollIndicator">
+        <span class="scroll-arrow"></span>
+      </div>
+
+    </section>
+
+    <!--
+      ABOUT SNAPSHOT SECTION: A brief biography section on the homepage.
+      This is not the full About page. It gives just enough personal context
+      to make the visitor curious and link them through to about.html.
+      The "reveal" class triggers the scroll animation via Intersection Observer.
+    -->
+    <section class="section bio-snapshot reveal" id="bioSnapshot">
+
+      <div class="container">
+
+        <!--
+          SECTION HEADER: A reusable layout pattern used across sections.
+          The small label above the heading gives hierarchy and context.
+          The heading itself uses clamp() so it scales across screen sizes.
+        -->
+        <div class="section-header">
+          <p class="section-label">Who I Am</p>
+          <h2 class="section-title">A Brief Introduction</h2>
+        </div>
+
+        <!--
+          BIO GRID: Uses CSS Grid to place the photo placeholder and text
+          side by side on desktop, and stack them vertically on mobile.
+          The grid template is defined in style.css using a media query.
+        -->
+        <div class="bio-grid">
+
+          <!--
+            PHOTO PLACEHOLDER: Replace the inner content with an <img> tag
+            when a real profile photo is available.
+            Example: <img src="images/profile.jpg" alt="Abam Emmanuel Dodeye" />
+            The placeholder box maintains the correct aspect ratio via CSS
+            so the layout does not break without a real image.
+          -->
+         <!--
+  PROFILE PHOTO
+  Displays the student's photo inside the bio grid.
+  The alt attribute is required for accessibility and rubric compliance.
+-->
+<div class="bio-photo-placeholder">
+  <img src="images/profile.jpg" alt="Abam Emmanuel Dodeye" class="profile-photo" />
+</div>
+          <!--
+            BIO TEXT: The actual biography content.
+            Uses <p> tags for paragraph text and an unordered list for skills
+            so the content is semantically correct and easy to scan.
+          -->
+          <div class="bio-text">
+
+            <p class="bio-intro">
+              Hello. I am Abam Emmanuel Dodeye, a student at Miva Open University
+              with a growing focus on AI safety, cybersecurity, and the technologies
+              that shape how humans and machines interact.
+            </p>
+
+            <p>
+              Originally from Cross River State and raised in Lagos, I attended
+              The Ambassadors College Otta and AirForce Secondary School Ikeja
+              before pursuing my academic journey at Miva Open University. My
+              background spans LLM safety research, digital copywriting, and
+              data annotation, with my sights set firmly on a future in AI
+              research and cybersecurity.
+            </p>
+
+            <!--
+              SKILLS LIST: A semantic unordered list of current technical skills.
+              The list format makes this content easy to scan quickly,
+              which is important for recruiters and visitors with limited time.
+            -->
+            <ul class="skills-list">
+              <li>LLM Safety Research</li>
+              <li>Digital Copywriting</li>
+              <li>Data Annotation</li>
+              <li>Web Technologies (COS 106)</li>
+            </ul>
+
+            <a href="about.html" class="btn btn-primary" style="margin-top: 1.5rem;">
+              Read More About Me
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!--
+      FEATURED PROJECTS SECTION: A preview of the three main projects.
+      Shows cards with the project name and a short teaser. Clicking any card
+      or the section CTA takes the user to the full projects page.
+      Each card uses the "reveal" class for the scroll animation.
+    -->
+    <section class="section projects-preview reveal" id="projectsPreview">
+
+      <div class="container">
+
+        <div class="section-header">
+          <p class="section-label">What I Build</p>
+          <h2 class="section-title">Featured Projects</h2>
+        </div>
+
+        <!--
+          PROJECTS GRID: CSS Grid with three equal columns on desktop,
+          two on tablet, one on mobile. Defined in style.css with media queries.
+          Each card has a hover effect transition defined in CSS.
+        -->
+        <div class="projects-grid">
+
+          <!--
+            PROJECT CARD: Each card represents one project.
+            - The number badge is decorative and gives a visual count.
+            - The tag shows the primary technology stack focus.
+            - The arrow link points to the full projects page.
+          -->
+          <article class="project-card reveal">
+            <span class="project-number">01</span>
+            <h3 class="project-name">Sentinel AI</h3>
+            <p class="project-tag">Cybersecurity / Python</p>
+            <p class="project-desc">
+              An AI-powered email phishing detector that uses behavioral heuristics
+              and explainable risk scoring to identify social engineering threats.
+            </p>
+            <a href="projects.html" class="card-link">View Project</a>
+          </article>
+
+          <article class="project-card reveal">
+            <span class="project-number">02</span>
+            <h3 class="project-name">Annotex</h3>
+            <p class="project-tag">Web App / JavaScript</p>
+            <p class="project-desc">
+              A clean, responsive text data annotation dashboard built for labeling
+              machine learning datasets with session memory and export features.
+            </p>
+            <a href="projects.html" class="card-link">View Project</a>
+          </article>
+
+          <article class="project-card reveal">
+            <span class="project-number">03</span>
+            <h3 class="project-name">KeyTrack</h3>
+            <p class="project-tag">Music Tech / Web Audio API</p>
+            <p class="project-desc">
+              An interactive keyboard learning companion with a virtual keybed,
+              chord progression engine, and practice progress dashboard.
+            </p>
+            <a href="projects.html" class="card-link">View Project</a>
+          </article>
+
+        </div>
+
+        <div class="section-cta">
+          <a href="projects.html" class="btn btn-secondary">See All Projects</a>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!--
+      STATS / HIGHLIGHTS SECTION: A horizontal row of three quick-hit numbers
+      or facts. These are common on modern portfolios and add visual weight
+      between content sections. Numbers animate up from zero using JS
+      when they enter the viewport.
+    -->
+    <section class="section stats-section reveal" id="statsSection">
+
+      <div class="container">
+
+        <!--
+          STATS GRID: Three equal columns on desktop, stacks on mobile.
+          The "data-target" attribute is read by the countUp() function
+          in main.js to know what number to count to.
+        -->
+        <div class="stats-grid">
+
+          <div class="stat-item">
+            <span class="stat-number" data-target="3">0</span>
+            <p class="stat-label">Projects Built</p>
+          </div>
+
+          <div class="stat-item">
+            <span class="stat-number" data-target="4">0</span>
+            <p class="stat-label">Technical Skills</p>
+          </div>
+
+          <div class="stat-item">
+            <span class="stat-number" data-target="2">0</span>
+            <p class="stat-label">Schools Attended</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!--
+      CONTACT TEASER SECTION: A bold, full-width call-to-action at the bottom
+      of the homepage inviting visitors to reach out. Mirrors the style
+      of the Landon Norris site where the footer area has a strong CTA.
+    -->
+    <section class="section contact-teaser reveal" id="contactTeaser">
+
+      <div class="container">
+        <p class="section-label">Say Hello</p>
+        <h2 class="teaser-heading">
+          Let us build something<br />
+          <span class="gold">meaningful together.</span>
+        </h2>
+        <a href="contact.html" class="btn btn-primary">Start A Conversation</a>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!--
+    FOOTER: The site-wide footer at the bottom of every page.
+    Contains copyright and quick links. Kept minimal in keeping
+    with the black and gold minimalist aesthetic.
+  -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+
+      <p class="footer-copy">
+        &copy; 2025 Abam Emmanuel Dodeye. COS 106 Portfolio Project.
+      </p>
+
+      <!--
+        FOOTER NAV: Repeating key links in the footer is a usability
+        best practice. Users who reach the bottom of the page should
+        not have to scroll back to the top to navigate.
+      -->
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="planner.html">Planner</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+    </div>
+  </footer>
+
+  <!--
+    MAIN JAVASCRIPT: Loaded at the very bottom of the body tag.
+    This is intentional. The browser parses HTML top to bottom.
+    Loading JS here means all HTML elements exist in the DOM before
+    the script tries to find and manipulate them. If loaded in <head>,
+    the script would run before elements existed and throw errors.
+  -->
+  <script src="js/main.js"></script>
+
+</body>
+</html>
